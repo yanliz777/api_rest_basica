@@ -1,6 +1,7 @@
 package com.yan.restfulapp.service.implementacion;
 
 import com.yan.restfulapp.entity.Local;
+import com.yan.restfulapp.error.LocalNotFoundException;
 import com.yan.restfulapp.repository.LocalRepository;
 import com.yan.restfulapp.service.interfaces.LocalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,17 @@ public class LocalServiceImpl implements LocalService {
     LocalRepository localRepository;
 
     @Override
+    public Local findLocalById(Long id) throws LocalNotFoundException {
+        Optional<Local> local = localRepository.findById(id);
+
+        if(!local.isPresent()) {
+            throw new LocalNotFoundException("Local is not available");
+        }
+
+        return local.get();
+    }
+
+    @Override
     public List<Local> findAllLocals() {
         return localRepository.findAll();
     }
@@ -28,7 +40,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     public Local updateLocal(Long id, Local local) {
-        Local localDB = localRepository.findById(id).get();
+        Local localDB = localRepository.findById(id).get();//get porque nos retorna un Optional
 
     /*
      Los siguientes condicionales Verifican/validad que el atributo 'code' de 'local' no
@@ -66,5 +78,10 @@ public class LocalServiceImpl implements LocalService {
     @Override
     public Optional<Local> findByNameLocal(String name) {
         return localRepository.findByName(name);
+    }
+
+    @Override
+    public Optional<Local> findByNameIgnoreCase(String name) {
+        return localRepository.findByNameIgnoreCase(name);
     }
 }

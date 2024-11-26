@@ -1,7 +1,9 @@
 package com.yan.restfulapp.controller;
 
 import com.yan.restfulapp.entity.Local;
+import com.yan.restfulapp.error.LocalNotFoundException;
 import com.yan.restfulapp.service.interfaces.LocalService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,14 +17,22 @@ public class LocalController {
     @Autowired
     LocalService localService;
 
+    @GetMapping("/findLocalById/{id}")
+    public Local findLocalById(@PathVariable Long id)throws LocalNotFoundException {
+        return localService.findLocalById(id);
+    }
+
     @GetMapping("/findALLocals")
     public List<Local> findALLocals(){
         return localService.findAllLocals();
     }
 
     @PostMapping("/saveLocal")
-    //Con @RequestBody Local local, indicamos el Body que envia el cliente en la petición
-    public Local saveLocal(@RequestBody Local local){
+    /*
+    Con @RequestBody Local local, indicamos el Body que envia el cliente en la petición.
+    con @Valid indicamos que en este endpoint vamos a validar el Local que se resgistra en la BD
+     */
+    public Local saveLocal(@Valid @RequestBody Local local){
         localService.saveLocal(local);
         return local;
     }
@@ -46,6 +56,11 @@ public class LocalController {
     @GetMapping("/findLocalByName/{name}")
     public Optional<Local> findByNameLocal(@PathVariable String name){
         return localService.findByNameLocal(name);
+    }
+
+    @GetMapping("/findByNameIgnoreCase/{name}")
+    public  Optional<Local> findByNameIgnoreCase(@PathVariable String name){
+        return localService.findByNameIgnoreCase(name);
     }
 
 }

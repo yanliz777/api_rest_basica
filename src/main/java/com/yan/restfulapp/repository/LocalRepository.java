@@ -15,4 +15,8 @@ public interface LocalRepository extends JpaRepository<Local, Long> {
 
     //Misma Consulta pero utilizando inversión de control de Spring Data JPA:
     Optional<Local> findByName(String name);
+
+    //misma consulta, pero ingnorando mayúsculas o minuscula:
+    Optional<Local> findByNameIgnoreCase(String name);
+
 }
