@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service//con esto le indicamos a spring que acá está nuestra capa de servicio
 public class LocalServiceImpl implements LocalService {
@@ -55,5 +56,15 @@ public class LocalServiceImpl implements LocalService {
     @Override
     public void deleteLocal(Long id) {
         localRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Local> findLocalByNameWithJPQL(String name) {
+        return localRepository.findLocalByNameWithJPQLAnd(name);
+    }
+
+    @Override
+    public Optional<Local> findByNameLocal(String name) {
+        return localRepository.findByName(name);
     }
 }
